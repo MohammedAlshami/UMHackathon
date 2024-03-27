@@ -5,6 +5,7 @@ import ChatContainer from "../components/ChatComponents/ChatContainer";
 import ChatBubble from "../components/ChatComponents/BotMessage";
 import InputBar from "../components/ChatComponents/InputBar";
 import AppLayout from "../components/AppLayout";
+import AnalysisComponent from "../components/Graphs/AnalysisComponent";
 interface Message {
   content: string;
   role: string;
@@ -43,6 +44,11 @@ const IndexPage: React.FC = () => {
     <AppLayout>
       <ChatContainer>
         <div>
+          <ChatBubble user="bot" headline="">
+            <div className="py-12">
+              <AnalysisComponent></AnalysisComponent>
+            </div>
+          </ChatBubble>
           {messages.map((message, index) => (
             <div key={index}>
               <ChatBubble user={message.role} headline="">
