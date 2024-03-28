@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <>
       <ChatContainer>
-        <ChatBubble image="" headline="" user="bot">
+        <ChatBubble  headline="" user="bot">
           <div className="space-y-3">
             <h2 className="font-medium text-gray-800 dark:text-white">
               How can we help?
