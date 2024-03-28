@@ -2,6 +2,7 @@ import React from "react";
 
 interface InputBarProps {
   onClickHandler: () => void;
+  onKeyDownHandler: () => void;
   OnChangeHandler: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   userContent: string;
 }
@@ -10,6 +11,7 @@ const InputBar: React.FC<InputBarProps> = ({
   onClickHandler,
   OnChangeHandler,
   userContent,
+  onKeyDownHandler,
 }) => {
   return (
     <footer className="sticky bottom-0 z-10 bg-white border-t border-gray-200 pt-2 pb-3 sm:pt-4 sm:pb-6 dark:bg-slate-900 dark:border-gray-700">
@@ -61,8 +63,8 @@ const InputBar: React.FC<InputBarProps> = ({
             placeholder="Ask me anything..."
             onChange={OnChangeHandler}
             value={userContent}
-          >
-          </textarea>
+            onKeyDown={onKeyDownHandler}
+          ></textarea>
 
           <div className="absolute bottom-px inset-x-px p-2 rounded-b-md bg-white dark:bg-slate-900">
             <div className="flex justify-between items-center">
@@ -88,10 +90,11 @@ const InputBar: React.FC<InputBarProps> = ({
                   </svg>
                 </button>
 
-                <button
-                  type="button"
-                  className="inline-flex flex-shrink-0 justify-center items-center size-8 rounded-lg text-gray-500 hover:text-blue-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-blue-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                <label
+                  htmlFor="fileInput"
+                  className=" cursor-pointer inline-flex flex-shrink-0 justify-center items-center size-8 rounded-lg text-gray-500 hover:text-blue-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-blue-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                 >
+                  <input type="file" id="fileInput" className="hidden" />
                   <svg
                     className="flex-shrink-0 size-4"
                     xmlns="http://www.w3.org/2000/svg"
@@ -104,9 +107,9 @@ const InputBar: React.FC<InputBarProps> = ({
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   >
-                    <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+                    <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57a4 4 0 1 1 5.66 5.66l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />
                   </svg>
-                </button>
+                </label>
               </div>
 
               <div className="flex items-center gap-x-1">

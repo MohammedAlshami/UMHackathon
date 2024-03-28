@@ -6,7 +6,7 @@ interface ChatContainerProps {
   }
 const ChatContainer: React.FC<ChatContainerProps> = ({children })=> {
   return (
-    <div className="relative h-screen">
+    <div className="relative h-screen overflow-y-auto pt-96">
       <div className="py-10 lg:py-14">
         <div className="max-w-4xl px-4 sm:px-6 lg:px-8 mx-auto text-center">
           <svg
