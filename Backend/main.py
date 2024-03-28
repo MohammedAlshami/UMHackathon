@@ -250,25 +250,31 @@ def analyze_gpt():
     except Exception as e:
         return str(e), 500
     
+    
+conversation_history = [] 
 @app.route('/chat', methods=['GET', 'POST'])
 def ask():
     try:
         if request.method == 'POST':
             message = request.args.get('message')
             print(message)
-            # if 'message' not  data:
-            #     raise ValueError('Message parameter is required')
-            # message = data['message']
+            conversation_history.append({"role": "system", "content": "You are a helpful assistant. return output in markdown"})
+            conversation_history.append({"role": "user", "content": message})
+            completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=conversation_history
+            )
+            conversation_history.append({"role": "assistant", "content": completion.choices[0].message.content}) 
         elif request.method == 'GET':
             message = request.args.get('message')
             print(message)
+            conversation_history.append({"role": "system", "content": "You are a helpful assistant. return output in markdown"})
+            conversation_history.append({"role": "user", "content": message})
             completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant. return output in markdown"},
-                {"role": "user", "content": f"{message} return output in markdown"}
-            ]
+            messages=conversation_history
             )
+            conversation_history.append({"role": "assistant", "content": completion.choices[0].message.content})  
 
         return jsonify({"content": completion.choices[0].message.content}), 200
     except Exception as e:

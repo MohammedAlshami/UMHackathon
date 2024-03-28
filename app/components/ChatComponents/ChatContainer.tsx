@@ -7,7 +7,7 @@ interface ChatContainerProps {
 const ChatContainer: React.FC<ChatContainerProps> = ({children })=> {
   return (
     <div className="relative h-screen overflow-y-auto pt-96">
-      <div className="py-10 lg:py-14">
+      <div className="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
         <div className="max-w-4xl px-4 sm:px-6 lg:px-8 mx-auto text-center">
           <svg
             className="w-28 h-auto mx-auto mb-4"
@@ -51,7 +51,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({children })=> {
           </p>
         </div>
 
-        <ul className="mt-16 space-y-5">
+        <ul className="mt-16 space-y-12">
 
            
         {children}
