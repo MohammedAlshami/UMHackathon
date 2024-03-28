@@ -5,6 +5,8 @@ interface InputBarProps {
   onKeyDownHandler: () => void;
   OnChangeHandler: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   userContent: string;
+  children: React.ReactNode;
+
 }
 
 const InputBar: React.FC<InputBarProps> = ({
@@ -12,6 +14,7 @@ const InputBar: React.FC<InputBarProps> = ({
   OnChangeHandler,
   userContent,
   onKeyDownHandler,
+  children
 }) => {
   return (
     <footer className="sticky bottom-0 z-10 bg-white border-t border-gray-200 pt-2 pb-3 sm:pt-4 sm:pb-6 dark:bg-slate-900 dark:border-gray-700">
@@ -111,9 +114,10 @@ const InputBar: React.FC<InputBarProps> = ({
                   </svg>
                 </label>
               </div>
-
+           
               <div className="flex items-center gap-x-1">
-                <button
+              {children}
+                {/* <button
                   type="button"
                   className="inline-flex flex-shrink-0 justify-center items-center size-8 rounded-lg text-gray-500 hover:text-blue-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-blue-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                 >
@@ -133,7 +137,7 @@ const InputBar: React.FC<InputBarProps> = ({
                     <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
                     <line x1="12" x2="12" y1="19" y2="22" />
                   </svg>
-                </button>
+                </button> */}
 
                 <button
                   type="button"
