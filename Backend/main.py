@@ -250,33 +250,80 @@ def analyze_gpt():
     except Exception as e:
         return str(e), 500
     
-    
+
+def generate_message(message):
+    thread_id = thread.id  # Replace with your thread ID
+    assistant_id = "asst_jwyzSwGb5ENqfbCebNrup7nc"  # Replace with your assistant ID
+
+    thread_message = client.beta.threads.messages.create(
+    thread_id,
+    role="user",
+    content=message,
+    )
+    run = client.beta.threads.runs.create(
+        thread_id=thread_id,
+        assistant_id=assistant_id
+    )
+
+    while run.status in ['queued', 'in_progress', 'cancelling']:
+        time.sleep(1)
+        run = client.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run.id)
+
+    if run.status == 'completed':
+        messages = client.beta.threads.messages.list(thread_id=thread_id)
+        generated_message = ""
+        for msg in messages:
+            generated_message += str(msg.content)
+    else:
+        print(run.status)
+
+
+    return f"{list(messages)[0].content[0].text.value}"
+  
 conversation_history = [] 
+def gpt_response(conversation_history, role, message, prompt="return as a json object"):
+    message = request.args.get('message')
+    conversation_history.append({"role": "system", "content":role })
+    conversation_history.append({"role": "user", "content": f"{message} {prompt}"})
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=conversation_history,
+        response_format=  { "type": "json_object" }
+    )
+    response = completion.choices[0].message.content
+    print(json.loads(response))
+    if json.loads(response).get("requires_dataset", None):
+        response = generate_message(f"{message}")
+    else:
+        response = json.loads(response).get("content", None)
+        
+    return response
+
+# "You are a helpful assistant. return output in markdown"
+
 @app.route('/chat', methods=['GET', 'POST'])
 def ask():
     try:
         if request.method == 'POST':
             message = request.args.get('message')
-            print(message)
-            conversation_history.append({"role": "system", "content": "You are a helpful assistant. return output in markdown"})
-            conversation_history.append({"role": "user", "content": message})
-            completion = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=conversation_history
-            )
-            conversation_history.append({"role": "assistant", "content": completion.choices[0].message.content}) 
+            prompt = "check if the request needs access to database or knowledge base. return output as json in this format {content: content, requires_kb: true/false}"
+            response = gpt_response(conversation_history, role="You are a helpful assistant. return output in json", message=message, prompt=prompt)
+            conversation_history.append({"role": "assistant", "content": response}) 
         elif request.method == 'GET':
             message = request.args.get('message')
-            print(message)
-            conversation_history.append({"role": "system", "content": "You are a helpful assistant. return output in markdown"})
-            conversation_history.append({"role": "user", "content": message})
-            completion = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=conversation_history
-            )
-            conversation_history.append({"role": "assistant", "content": completion.choices[0].message.content})  
+            prompt = """
+            Hey ChatGPT, let's become data detectives! We'll figure out if users need a dataset for their requests. When someone asks a question, become a keyword sleuth - look for clues like "data," "analyze," "load," "dataset" "data" or specific dataset names. These suggest they might want to use data.  Next, turn into a data ownership investigator -  see if they mention their own data ("my data," "upload"). This could mean they have a personal dataset in mind.
 
-        return jsonify({"content": completion.choices[0].message.content}), 200
+Based on your findings, simply return a flag named "requires_dataset" with one of two options:
+
+True: If the user might need a dataset, either theirs or an external one.
+False: then respond normally and put response inside content flag, make sure you respond to the request if it's False
+This simplifies the process and eliminates the need for an additional response when "requires_dataset" is "TRUE." ChatGPT can handle prompting the user for data access later based on this flag. Let's make data analysis a breeze for everyone!
+            """
+            response = gpt_response(conversation_history, role="You are a helpful assistant. return output in json", message=message, prompt=prompt)
+            conversation_history.append({"role": "assistant", "content": response})  
+
+        return jsonify({"content": response}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
