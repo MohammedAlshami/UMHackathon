@@ -127,37 +127,36 @@ with client.beta.threads.runs.create_and_stream(
 #     thread_id=thread.id,
 #     assistant_id=assistant.id,
 #     instructions="Please address the user as Jane Doe. The user has a premium account.",
-#     stream=True  # Enable streaming
 
 # )
-# while True:
-#     response = client.beta.threads.runs.events.list(thread_id=thread.id, run_id=run.id)
-#     for event in response:
-#         if event.type == "assistant_response":
-#             print("Assistant:", event.data.text)
-#         elif event.type == "completion":
-#             print("Completion:", event.data.text)
-#         elif event.type == "assistant_status":
-#             print("Assistant Status:", event.data.status)
-#         elif event.type == "run_status":
-#             print("Run Status:", event.data.status)
+while True:
+    response = client.beta.threads.runs.events.list(thread_id=thread.id, run_id=run.id)
+    for event in response:
+        if event.type == "assistant_response":
+            print("Assistant:", event.data.text)
+        elif event.type == "completion":
+            print("Completion:", event.data.text)
+        elif event.type == "assistant_status":
+            print("Assistant Status:", event.data.status)
+        elif event.type == "run_status":
+            print("Run Status:", event.data.status)
         
-#         # Check if the run has completed
-#         if event.type == "run_status" and event.data.status == "completed":
-#             exit()
+        # Check if the run has completed
+        if event.type == "run_status" and event.data.status == "completed":
+            exit()
 
-#     # Add some delay to avoid hitting API rate limits
-#     time.sleep(1)
+    # Add some delay to avoid hitting API rate limits
+    time.sleep(1)
 
 # # Monitor Run status
-# while run.status in ['queued', 'in_progress', 'cancelling']:
-#     time.sleep(1)  # Wait for 1 second
-#     run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
+while run.status in ['queued', 'in_progress', 'cancelling']:
+    time.sleep(1)  # Wait for 1 second
+    run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
 
-# # Once the Run completes, list the Messages added to the Thread by the Assistant
-# if run.status == 'completed':
-#     messages = client.beta.threads.messages.list(thread_id=thread.id)
-#     for msg in messages:
-#         print(msg.content)
-# else:
-#     print(run.status)
+# Once the Run completes, list the Messages added to the Thread by the Assistant
+if run.status == 'completed':
+    messages = client.beta.threads.messages.list(thread_id=thread.id)
+    for msg in messages:
+        print(msg.content)
+else:
+    print(run.status)
