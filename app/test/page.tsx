@@ -1,18 +1,17 @@
 // MyPage.js
 'use client';
 import React from "react";
-import LogicComponent from "./TranscriptionUI";
-import UIComponent from "./UIComponent";
-import dynamic from "next/dynamic";
-// const DynamicUIComponent = dynamic(() => import("./page1"), { ssr: false });
-// const DynamicLogicComponent = dynamic(() => import("./UIComponent"), { ssr: false });
-// import MyPage from "./TranscriptionUI";
-import TranscriptionUI from "./TranscriptionUI";
-
+import BarGraph from "../components/Charts/BarGraph";
+import PieGraph from "../components/Charts/PieGraph";
+import LineGraph from "../components/Charts/LineGraph";
 const Page = () => {
 
   return(
-    <TranscriptionUI></TranscriptionUI>
+    <div className="grid grid-cols-3">
+        <BarGraph></BarGraph>
+        <PieGraph></PieGraph>
+        <LineGraph></LineGraph>
+    </div>
   );
 };
 
