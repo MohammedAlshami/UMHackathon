@@ -17,6 +17,12 @@ interface Message {
 
 const IndexPage: React.FC = () => {
   const [isChart, setIsChart] = useState(false);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const handleAudioPlay = (url: string) => {
+    const audio = new Audio(url);
+    audio.play();
+  };
+
 
   // Transcription Logic Variables
   const { startRecording, stopRecording, error, transcribedText } =
@@ -36,6 +42,32 @@ const IndexPage: React.FC = () => {
     // if (isRecording) {
     //   handleSubmit(transcribedText); // Call handleSubmit only when recording is stopped
     // }
+  };
+  const generateAudioForResponse = async (content: string) => {
+    try {
+      const audioResponse = await fetch(
+        "https://api.openai.com/v1/audio/speech",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer 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`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "tts-1",
+            input: content,
+            voice: "alloy",
+          }),
+        }
+      );
+      const audioData = await audioResponse.arrayBuffer();
+      const blob = new Blob([audioData], { type: "audio/mpeg" });
+      const audioUrl = URL.createObjectURL(blob);
+      return audioUrl;
+    } catch (error) {
+      console.error("Error generating audio:", error);
+      return null; // Return null in case of error
+    }
   };
 
   // Message Handling
@@ -85,6 +117,8 @@ const IndexPage: React.FC = () => {
           role: "bot",
         };
       }
+      const audioUrl = await generateAudioForResponse(response.content);
+      setAudio(audioUrl);
       // Remove the loading message and add the bot message
       const updatedMessagesWithBotMessage = messagesWithLoading
         .slice(0, -1)
@@ -128,6 +162,7 @@ const IndexPage: React.FC = () => {
       }
     }
   }, [userContent]);
+
   return (
     <AppLayout>
       <ChatContainer>
@@ -149,6 +184,11 @@ const IndexPage: React.FC = () => {
                   <div dangerouslySetInnerHTML={{ __html: message.content }} />
                 )}
               </ChatBubble>
+              {message.role === 'bot' && audio && (
+                <div>
+                  <button onClick={() => handleAudioPlay(audio)}>Play Audio</button>
+                </div>
+              )}
             </div>
           ))}
           <div ref={messagesEndRef} />{" "}
