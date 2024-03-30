@@ -406,15 +406,8 @@ def gpt_graph_options(message):
         messages=[
             {"role": "system", "content": "You're a graph options assistant. You assist in  in giving graph options"},
             {"role": "user", "content": f"""Based on the following prompt, figure out what kind of graphs is the user looking for and return a list of the possible graphs  in json response as flag graph_types
-            Revenue Trend Analysis: This graph illustrates the trend of revenue over a period of time, showcasing fluctuations and identifying patterns.
-Expense Distribution: A graph displaying the distribution of expenses across different categories, providing insights into where the majority of expenses lie.
 Profit Margin Analysis: This graph compares the revenue generated to the expenses incurred, depicting the profit margins and identifying periods of profitability.
-Cash Flow Statement: A graph illustrating the inflow and outflow of cash over a specific timeframe, helping to monitor liquidity and financial health.
 Return on Investment (ROI): This graph evaluates the return on investment for different assets or projects, aiding in decision-making for future investments.
-Debt-to-Equity Ratio: A graph comparing the proportion of debt to equity over time, indicating the financial leverage and risk management strategies of the organization.
-Market Share Analysis: This graph displays the market share of a company or product compared to competitors, providing insights into market positioning and competitiveness.
-Budget Variance Analysis: A graph showing the variance between budgeted and actual expenses or revenues, facilitating budget management and performance evaluation.
-Portfolio Performance: This graph tracks the performance of investment portfolios, comparing returns against benchmarks and assessing portfolio diversification.
 Risk vs. Return: A graph illustrating the relationship between risk and potential return for different investment options, aiding investors in making informed decisions based on their risk tolerance.
                 
                 below is the user prompt: 
@@ -432,7 +425,23 @@ def gpt_requires_dataset(message):
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You're a graph assistant. You assist in defining what graphs should be used"},
-            {"role": "user", "content": f"Based on the following prompt, define whether they user requires access to dataset/database or not (return output in json with tag requires_dataset which should be either True or False). looks for keywords that refer to the past like ago or last. here is the prompt, {message}"}
+            {"role": "user", "content": f"""
+             Your task is to determine whether the user's request necessitates accessing a dataset or database. Return the output in JSON format with the tag requires_dataset, which should be either true or false. Look for keywords indicating past references such as 'ago' or 'last' within the provided prompt. Here's the prompt to consider: {message}"
+
+Keywords to Look For:
+'ago'
+'last'
+'previous'
+'historical'
+'prior'
+'formerly'
+'formerly known as'
+'earlier'
+'preceding'
+
+here is the user request:
+{message}
+             """}
         ],
         response_format={"type": "json_object"}
     )
@@ -456,16 +465,20 @@ def gpt_response(conversation_history, role, message, prompt="return as a json o
     print(json.loads(response))
  
     graph_type = gpt_graph(message)
+    print(graph_type)
 
     isHistory = gpt_requires_dataset(message)
-    
+    # isHistory["requires_dataset"] = False
     if isHistory.get("requires_dataset", None):
         print(f"""\n\n\n\n\n {isHistory.get("requires_dataset", None)} \n\n\n""")
         response = generate_message(f"based on file file-RmSde8yAJ8WDcuSLQtRHZFDL and keep your answer to one sentence long {message}")
     else:
         if graph_type.get("is_graph_required", None):
             graphs_types = gpt_graph_options(message)
-            return {"options": "True", "graphs": graphs_types.get("graph_types", None)}
+            print(f"""\n\n\n\n {type(graphs_types.get("graph_types", None))} \n\n\n\n""")
+            response = {"options": "True", "graphs": graphs_types.get("graph_types", None)}
+            print(response)
+            return response
             data = [
                 [35, 44, 24, 34],
                 [51, 6, 49, 30],
