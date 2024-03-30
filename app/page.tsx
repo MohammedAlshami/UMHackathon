@@ -28,8 +28,6 @@ const IndexPage: React.FC = () => {
   };
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLanguage(e.target.value);
-
-    alert(language);
   };
 
   // Transcription Logic Variables
@@ -53,7 +51,6 @@ const IndexPage: React.FC = () => {
   };
   const generateAudioForResponse = async (content: string) => {
     const hiMessage = `${content}`;
-    alert(hiMessage);
 
     try {
       const audioResponse = await fetch(
@@ -67,7 +64,7 @@ const IndexPage: React.FC = () => {
           body: JSON.stringify({
             model: "tts-1-hd",
             input: hiMessage,
-            voice: "alloy"
+            voice: "alloy",
           }),
         }
       );
@@ -125,7 +122,7 @@ const IndexPage: React.FC = () => {
       } else {
         setIsChart(false);
         botMessage = {
-          content: await renderMarkdown(response.content),
+          content: response.content,
           role: "bot",
         };
       }
@@ -184,9 +181,10 @@ const IndexPage: React.FC = () => {
   }, [messages]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSubmit();
-    }
+    console.log("hello world!");
+    // if (e.key === "Enter") {
+    //   handleSubmit();
+    // }
   };
 
   useEffect(() => {
@@ -246,7 +244,6 @@ const IndexPage: React.FC = () => {
                 <option value="indian">Indian</option>
                 <option value="chinese">Chinese</option>
                 <option value="arabic">arabic</option>
-
               </select>
             </form>
           </p>
@@ -273,11 +270,11 @@ const IndexPage: React.FC = () => {
 
                 <div className="flex flex-row gap-22 items-center">
                   {isChart ? (
-                    <div className="w-96">{message.content}</div>
+                    <div>{message.content}</div>
                   ) : (
-                    <div
-                      dangerouslySetInnerHTML={{ __html: message.content }}
-                    />
+                    <div>
+                       {message.content}
+                    </div>
                   )}
                   {/* {message.role === "bot" && audio && (
                     <div>

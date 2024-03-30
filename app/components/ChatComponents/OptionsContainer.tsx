@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { BarChart, LineChart, PieChart } from "@mui/x-charts";
+
+import { BarChart, LineChart, PieChart, pieArcLabelClasses} from "@mui/x-charts";
 interface OptionsContainerProps {
   values: string[];
 }
@@ -10,6 +11,14 @@ const OptionsContainer: React.FC<OptionsContainerProps> = ({ values }) => {
   const handleButtonClick = (type) => {
     setGraphType(type);
   };
+  const cat = [
+    "Income/Salary",
+    "Utilities",
+    "Other Expenses",
+    "Government Services",
+    "Groceries",
+  ];
+  const vals = [100000.0, 50000.0, 4000.0, 20000.0, 8130.0];
 
   return (
     <div className="w-full">
@@ -35,14 +44,40 @@ const OptionsContainer: React.FC<OptionsContainerProps> = ({ values }) => {
           </p>
         </div>
       )}
-      {graphType === "Return on Investment (ROI)" && (
-        <PieChart
-          series={[
-            { data: [{ id: 0, value: 10, label: "A" }] },
-            { data: [{ id: 1, value: 20, label: "B" }] },
-          ]}
-          height={300}
-        />
+      {graphType === "Spending Breakdown" && (
+        <div className="p-12">
+          <PieChart
+            slotProps={{
+              legend: {
+                direction: "column",
+                position: { vertical: "top", horizontal: "right" },
+                padding: 0,
+                
+              },
+            }}
+            series={[
+              {
+                
+                arcLabel: (item) => `RM ${item.value}`, // Customizing arc label
+                arcLabelMinAngle: 20, // Setting minimum angle for displaying arc label
+                data: vals.map((val, idx) => ({
+                  id: idx,
+                  value: val,
+                  label: cat[idx],
+                })),
+                
+              },
+            ]}
+            sx={{
+              [`& .${pieArcLabelClasses.root}`]: {
+                fill: "white", // Setting color of arc label text
+                fontWeight: "bold", // Making arc label text bold
+              },
+            }}
+            height={300}
+            width={650}
+          />
+        </div>
       )}
       {graphType === "Risk vs. Return" && (
         <BarChart
