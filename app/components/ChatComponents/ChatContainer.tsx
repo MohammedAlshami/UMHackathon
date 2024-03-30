@@ -44,10 +44,10 @@ const ChatContainer: React.FC<ChatContainerProps> = ({children })=> {
           </svg>
 
           <h1 className="text-3xl font-bold text-gray-800 sm:text-4xl dark:text-white">
-            Welcome to Preline AI
+          Welcome to Demiurges
           </h1>
           <p className="mt-3 text-gray-600 dark:text-gray-400">
-            Your AI-powered copilot for the web
+            Your AI-powered Financial Advisor
           </p>
         </div>
 

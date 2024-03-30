@@ -8,6 +8,7 @@ import AppLayout from "../components/AppLayout";
 import AnalysisComponent from "../components/Graphs/AnalysisComponent";
 import { renderMarkdown } from "../components/ChatUtils/MarkdownRender";
 import useClientLogic from "../test/useClientLogic";
+import { BarChart } from "@mui/x-charts";
 
 interface Message {
   content: string;
@@ -15,6 +16,8 @@ interface Message {
 }
 
 const IndexPage: React.FC = () => {
+  const [isChart, setIsChart] = useState(false);
+
   // Transcription Logic Variables
   const { startRecording, stopRecording, error, transcribedText } =
     useClientLogic();
@@ -68,10 +71,21 @@ const IndexPage: React.FC = () => {
       setMessages(messagesWithLoading);
 
       const response = await fetchOpenAIResponse(newUserMessage.content);
-      const botMessage: Message = {
-        content: await renderMarkdown(response["content"]),
-        role: "bot",
-      };
+      let botMessage: Message;
+      if (response.isGraph) {
+        setIsChart(true);
+
+        botMessage = {
+          content: response.content,
+          role: "bot",
+        };
+      } else {
+        setIsChart(false);
+        botMessage = {
+          content: await renderMarkdown(response.content),
+          role: "bot",
+        };
+      }
       // Remove the loading message and add the bot message
       const updatedMessagesWithBotMessage = messagesWithLoading
         .slice(0, -1)
@@ -122,7 +136,11 @@ const IndexPage: React.FC = () => {
               <ChatBubble user={message.role} headline="">
                 {/* Render the markdown content */}
                 {/* {loading && message.role === "bot" && <p>Loading...</p>} */}
-                <div dangerouslySetInnerHTML={{ __html: message.content }} />
+               
+                {isChart ? ( <div className="w-96">
+                {message.content}
+                </div>) : <div dangerouslySetInnerHTML={{ __html: message.content }} />}
+                
               </ChatBubble>
             </div>
           ))}

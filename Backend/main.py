@@ -280,10 +280,40 @@ def generate_message(message):
 
     return f"{list(messages)[0].content[0].text.value}"
   
+test_graph = """
+ <BarGraph
+        data={[
+          { data: [35, 44, 24, 34] },
+          { data: [51, 6, 49, 30] },
+          { data: [15, 25, 30, 50] },
+          { data: [60, 50, 15, 25] },
+        ]}
+        xAxisData={[{ data: ['Q1', 'Q2', 'Q3', 'Q4'], scaleType: 'band' }]}
+        height={290}
+        margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
+      />
+      
+"""
+def gpt_graph(message):
+        
+    if request.method == 'GET':
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You're a graph assistant. You assist in defining what graphs should be used"},
+                {"role": "user", "content": f"Based on the following prompt, define what graphs should be used from the list of options ['line', 'pie'] (return output in json with tag graph_type). here is the prompt, {message}"}
+            ],
+            response_format={"type": "json_object"}
+        )
+        response = completion.choices[0].message.content
+        
+    return response
+
 conversation_history = [] 
 def gpt_response(conversation_history, role, message, prompt="return as a json object"):
+    conversation_history = [] 
     message = request.args.get('message')
-    conversation_history.append({"role": "system", "content":role })
+    conversation_history.append({"role": "system", "content": role })
     conversation_history.append({"role": "user", "content": f"{message} {prompt}"})
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -292,11 +322,22 @@ def gpt_response(conversation_history, role, message, prompt="return as a json o
     )
     response = completion.choices[0].message.content
     print(json.loads(response))
-    if json.loads(response).get("requires_dataset", None):
-        response = generate_message(f"{message}")
+    
+    if json.loads(response).get("isgraph", None):
+        data = [
+            [35, 44, 24, 34],
+            [51, 6, 49, 30],
+             [15, 25, 30, 50],
+              [129, 50, 15, 25
+              ]]
+        xAxisData= ['Q1', 'Q2', 'Q3', 'Q4']
+        return {"content": "None",  "graph" : [], "data": data, "xAxis": xAxisData, "scaleType": "band", graph_type: gpt_graph(message)["graph_type"]}
     else:
-        response = json.loads(response).get("content", None)
-        
+        if json.loads(response).get("requires_dataset", None):
+            response = generate_message(f"based on file file-RmSde8yAJ8WDcuSLQtRHZFDL {message}")
+        else:
+            response = json.loads(response).get("content", None)
+            
     return response
 
 # "You are a helpful assistant. return output in markdown"
@@ -312,13 +353,28 @@ def ask():
         elif request.method == 'GET':
             message = request.args.get('message')
             prompt = """
-            Hey ChatGPT, let's become data detectives! We'll figure out if users need a dataset for their requests. When someone asks a question, become a keyword sleuth - look for clues like "data," "analyze," "load," "dataset" "data" or specific dataset names. These suggest they might want to use data.  Next, turn into a data ownership investigator -  see if they mention their own data ("my data," "upload"). This could mean they have a personal dataset in mind.
+Identifying Data Needs:
 
-Based on your findings, simply return a flag named "requires_dataset" with one of two options:
+When a user asks a question, become a "keyword sleuth." Look for clues like "data," "analyze," "load," "dataset," or specific dataset names. These indicate a potential need for data.
+Transition into a "data ownership investigator." Check if they mention their own data ("my data," "upload"). This suggests they have a personal dataset in mind.
+Flagging Data Requirement:
 
-True: If the user might need a dataset, either theirs or an external one.
-False: then respond normally and put response inside content flag, make sure you respond to the request if it's False
-This simplifies the process and eliminates the need for an additional response when "requires_dataset" is "TRUE." ChatGPT can handle prompting the user for data access later based on this flag. Let's make data analysis a breeze for everyone!
+Based on your findings, return a flag named "requires_dataset" with one of two options:
+True: If the user might need a dataset, either their own or an external one.
+False: If not, respond normally and include the response within the "content" flag. Ensure you address the request if it's False.
+Streamlining Graph Generation:
+
+If the user requests to generate a graph, add two flags:
+The first flag, "isgraph," can be either true or false.
+Another flag, "chart_type," specifies the type of graph requested. If the user doesn't provide a graph type, make an educated guess.
+If the terms "graph" or "chart" are mentioned in the message, set "isgraph" to True.
+The "chart_type" can be any of the following:
+Line: for a line graph
+Bar: for a bar graph
+Pie: for a pie graph
+Returning Essential Flags:
+
+Always include the flags "requires_dataset," "content," "isgraph," and "chart_type" in your response.
             """
             response = gpt_response(conversation_history, role="You are a helpful assistant. return output in json", message=message, prompt=prompt)
             conversation_history.append({"role": "assistant", "content": response})  
