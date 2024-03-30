@@ -410,6 +410,8 @@ def gpt_graph_options(message):
              Based on the following prompt, figure out what kind of graphs is the user looking for and return a list of the possible graphs which can only be from the below options
 "Spending Habits": This graph compares the revenue generated to the expenses incurred, depicting the profit margins and identifying periods of profitability.
 "Return on Investment (ROI)": This graph evaluates the return on investment for different assets or projects, aiding in decision-making for future investments.
+
+"Spending Breakdown": This pie chart highlights spending distribution across various expense categories.
 "Risk vs. Return": A graph illustrating the relationship between risk and potential return for different investment options, aiding investors in making informed decisions based on their risk tolerance.
                 
                 below is the user prompt: 

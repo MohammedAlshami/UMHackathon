@@ -1,0 +1,16 @@
+Income/Salary: 612571.0
+Utilities: 0.0
+Other Expenses: 0.0
+Government Services: 0.0
+Groceries: 0.0
+Insurance: 0.0
+Dining: 0.0
+Health & Fitness: 0.0
+Entertainment: 0.0
+Transportation: 0.0
+Debts/Overpayments: 0.0
+Education: 0.0
+Shopping: 0.0
+Savings: 0.0
+Investment: 0.0
+Travel: 0.0
