@@ -51,6 +51,96 @@ class EventHandler(AssistantEventHandler):
             # print(f"\n{output.logs}", flush=True)
             pass
 
+def generate_pie(column_name, json_file, start_date=None, end_date=None):
+    # Function to load JSON file and extract category data
+    def load_json_and_process(file_path, column_name, start_date=None, end_date=None):
+        # Function to load JSON file
+        def load_json_file(file_path):
+            with open(file_path, 'r') as file:
+                data = json.load(file)
+            return data
+
+        # Function to extract categories and their corresponding amounts
+        def extract_category_data(json_data, column_name, start_date=None, end_date=None):
+            category_totals = {}
+            for item in json_data:
+                if column_name in item and item[column_name].strip() != "":
+                    date = item.get("DATE", "")  # Assuming there's a "DATE" key in the JSON data
+                    if start_date and end_date:
+                        if start_date <= date <= end_date:
+                            category = item[column_name].strip()
+                            deposit_amt = item.get(" WITHDRAWAL AMT ", "").strip()
+                            if deposit_amt:  # Check if deposit amount is not empty
+                                amount = float(deposit_amt.replace(",", "").strip())
+                                category_totals[category] = category_totals.get(category, 0) + amount
+                    else:
+                        category = item[column_name].strip()
+                        deposit_amt = item.get(" WITHDRAWAL AMT ", "").strip()
+                        if deposit_amt:  # Check if deposit amount is not empty
+                            amount = float(deposit_amt.replace(",", "").strip())
+                            category_totals[category] = category_totals.get(category, 0) + amount
+            return category_totals
+
+        # Load JSON file
+        json_data = load_json_file(file_path)
+
+        # Convert start_date and end_date to datetime objects if provided
+        if start_date:
+            start_date = start_date
+        if end_date:
+            end_date = end_date
+
+        # Extract category data within the given date range
+        category_totals = extract_category_data(json_data, column_name, start_date, end_date)
+
+        return category_totals
+
+    # Process data and return labels and values
+    category_totals = load_json_and_process(json_file, column_name, start_date, end_date)
+    labels = list(category_totals.keys())
+    values = list(category_totals.values())
+
+    return [labels, values]
+def get_data_from_json(column_name, json_file, start_date=None, end_date=None):
+    # Function to load JSON file
+    def load_json_file(file_path):
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+        return data
+    
+    # Function to extract data for a specified column within a given date range
+    def extract_data(json_data, column_name, start_date=None, end_date=None):
+        x_values = []
+        y_values = []
+        for idx, item in enumerate(json_data, start=1):
+            if column_name in item and item[column_name].strip() != "":
+                date = item["DATE"]  # Assuming there's a "date" key in the JSON data
+                # Convert date strings to datetime objects if provided
+                if start_date and end_date:
+                    if start_date <= date <= end_date:
+                        x_values.append(idx)
+                        value = float(item[column_name].replace(",", "").strip())
+                        y_values.append(value)
+                else:
+                    x_values.append(idx)
+                    value = float(item[column_name].replace(",", "").strip())
+                    y_values.append(value)
+        return x_values, y_values
+    
+    # Load JSON file
+    json_data = load_json_file(json_file)
+    
+    # Convert start_date and end_date to datetime objects if provided
+    if start_date:
+        start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    if end_date:
+        end_date = datetime.strptime(end_date, "%Y-%m-%d")
+    
+    # Extract data for specified column within the given date range
+    x_values, y_values = extract_data(json_data, column_name, start_date, end_date)
+    
+    return x_values, y_values
+
 # Firebase configuration
 firebaseConfig = {
     "apiKey": "AIzaSyBLv1DiRB6egmpaoIKfjODXZF5fYheQKIM",
@@ -301,13 +391,13 @@ def gpt_graph(message):
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You're a graph assistant. You assist in defining what graphs should be used"},
-                {"role": "user", "content": f"Based on the following prompt, define what graphs should be used from the list of options ['line', 'pie'] (return output in json with tag graph_type). here is the prompt, {message}"}
+                {"role": "user", "content": f"Based on the following prompt, define what graphs should be used from the list of options ['line', 'pie', 'bar'] (return output in json with tag graph_type). here is the prompt, {message}"}
             ],
             response_format={"type": "json_object"}
         )
         response = completion.choices[0].message.content
         
-    return response
+    return json.loads(response)
 
 conversation_history = [] 
 def gpt_response(conversation_history, role, message, prompt="return as a json object"):
@@ -331,7 +421,24 @@ def gpt_response(conversation_history, role, message, prompt="return as a json o
               [129, 50, 15, 25
               ]]
         xAxisData= ['Q1', 'Q2', 'Q3', 'Q4']
-        return {"content": "None",  "graph" : [], "data": data, "xAxis": xAxisData, "scaleType": "band", graph_type: gpt_graph(message)["graph_type"]}
+        output = {}
+        graph_type = gpt_graph(message)["graph_type"]
+        if graph_type.lower() == "line":
+            column_name = " DEPOSIT AMT "  # Specify the column name for deposit amounts
+            json_file = r"C:\Users\USER\Downloads\Dataset.json"  # Replace "data.json" with your JSON file path
+            # Get x and y values from JSON data
+            x_values, y_values = get_data_from_json(column_name, json_file)
+            print(x_values)
+
+            return {"content": "None",  "graph" : [], "data": data, "xAxis": xAxisData, "scaleType": "band", "graph_type":graph_type , "X":x_values , "Y": y_values}
+        elif graph_type == "pie":
+            x_values, y_values = generate_pie('CATEGORY', r"C:\Users\USER\Downloads\Dataset.json", start_date=None, end_date=None)
+            return {"content": "None",  "graph" : [], "data": data, "xAxis": xAxisData, "scaleType": "band", "graph_type":graph_type , "X":x_values , "Y": y_values}
+
+        else:
+            return {"content": "None",  "graph" : [], "data": data, "xAxis": xAxisData, "scaleType": "band", "graph_type": graph_type}
+
+        return output
     else:
         if json.loads(response).get("requires_dataset", None):
             response = generate_message(f"based on file file-RmSde8yAJ8WDcuSLQtRHZFDL {message}")
