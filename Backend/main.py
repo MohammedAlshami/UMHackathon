@@ -1,19 +1,15 @@
 import json
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, Response
 import pyrebase
 import plotly.graph_objs as go
 import plotly
 from collections import defaultdict
 from bs4 import BeautifulSoup
 from flask_cors import CORS
-
 import os
 import time
-from openai import OpenAI
+from openai import OpenAI, AssistantEventHandler
 from typing_extensions import override
-from openai import AssistantEventHandler
-from flask import Flask, request, jsonify, Response
-
 
 api_key = "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"
 client = OpenAI(api_key=api_key)
@@ -513,8 +509,6 @@ def gpt_response(conversation_history, role, message, prompt="return as a json o
 
             
     return response
-
-# "You are a helpful assistant. return output in markdown"
 
 @app.route('/chat', methods=['GET', 'POST'])
 def ask():
