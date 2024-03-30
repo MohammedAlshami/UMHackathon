@@ -23,7 +23,6 @@ const IndexPage: React.FC = () => {
     audio.play();
   };
 
-
   // Transcription Logic Variables
   const { startRecording, stopRecording, error, transcribedText } =
     useClientLogic();
@@ -178,17 +177,32 @@ const IndexPage: React.FC = () => {
                 {/* Render the markdown content */}
                 {/* {loading && message.role === "bot" && <p>Loading...</p>} */}
 
+                <div className="flex flex-row gap-22 items-center">
                 {isChart ? (
                   <div className="w-96">{message.content}</div>
                 ) : (
                   <div dangerouslySetInnerHTML={{ __html: message.content }} />
                 )}
-              </ChatBubble>
-              {message.role === 'bot' && audio && (
-                <div>
-                  <button onClick={() => handleAudioPlay(audio)}>Play Audio</button>
+                {message.role === "bot" && audio && (
+                  <div>
+                    <button
+                      type="button"
+                      className="inline-flex flex-shrink-0 justify-center items-center size-8 rounded-lg text-gray-500 hover:text-blue-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-blue-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 " 
+                      onClick={() => handleAudioPlay(audio)}
+                    >
+                     <svg  className={`flex-shrink-0 size-10 ${
+                isSvgRed ? "text-red-500" : "text-blue-500"
+              }`}
+        
+                     xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24">
+	<path  d="M9.608 1.517c.77-.175 1.57-.267 2.392-.267c5.937 0 10.75 4.813 10.75 10.75S17.937 22.75 12 22.75c-.822 0-1.622-.092-2.392-.267a.75.75 0 1 1 .332-1.463a9.25 9.25 0 1 0 0-18.04a.75.75 0 1 1-.332-1.463M7.314 3.132a.75.75 0 0 1-.235 1.034A9.303 9.303 0 0 0 4.166 7.08a.75.75 0 0 1-1.27-.8A10.803 10.803 0 0 1 6.28 2.897a.75.75 0 0 1 1.035.235M2.98 9.94a.75.75 0 1 0-1.463-.332c-.175.77-.267 1.57-.267 2.392c0 .822.092 1.622.267 2.393a.75.75 0 0 0 1.463-.333A9.283 9.283 0 0 1 2.75 12c0-.709.08-1.398.23-2.06m.152 6.746a.75.75 0 0 1 1.034.235a9.302 9.302 0 0 0 2.913 2.913a.75.75 0 0 1-.8 1.27a10.804 10.804 0 0 1-3.382-3.383a.75.75 0 0 1 .235-1.035"></path>
+	<path d="M15.414 10.941c.781.462.781 1.656 0 2.118l-4.72 2.787C9.934 16.294 9 15.71 9 14.786V9.214c0-.924.934-1.507 1.694-1.059z"></path>
+</svg>
+                    </button>
+                  </div>
+                )}
                 </div>
-              )}
+              </ChatBubble>
             </div>
           ))}
           <div ref={messagesEndRef} />{" "}

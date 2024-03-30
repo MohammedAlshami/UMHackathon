@@ -13,58 +13,70 @@ export const fetchOpenAIResponse = async (message: string): Promise<any> => {
     const responseData = await response.json();
 
     try {
+      if (responseData["content"]["Options"] === "None") {
+        var barChart = (
+          <div></div>
+        );
+        return { content: barChart, isGraph: true };
+
+      }
       if (responseData["content"]["content"] === "None") {
-        if (responseData["content"]["graph_type"] === "line") {          
+        if (responseData["content"]["graph_type"] === "line") {
           var barChart = (
-          <LineChart
-            xAxis={[{ data: responseData["content"]["X"] }]}
-            series={[
-              {
-                data: responseData["content"]["Y"],
-              },  
-            ]}
-            height={300}
-            margin={{ left: 30, right: 30, top: 30, bottom: 30 }}
-            grid={{ vertical: true, horizontal: true }}
-          />);
+            <div>
+              <LineChart
+                xAxis={[{ data: responseData["content"]["X"] }]}
+                series={[
+                  {
+                    data: responseData["content"]["Y"],
+                  },
+                ]}
+                height={300}
+                margin={{ left: 30, right: 30, top: 30, bottom: 30 }}
+                grid={{ vertical: true, horizontal: true }}
+              />
+
+              <p>Observing the graph we can see that you spend your money mostly in 3 months</p>
+            </div>
+          );
         } else if (responseData["content"]["graph_type"] === "pie") {
           const labels = responseData["content"]["X"];
           const values = responseData["content"]["Y"];
-            // Create series data from labels and values lists
+          // Create series data from labels and values lists
           const seriesData = labels.map((label, index) => ({
-              id: index,
-              value: values[index],
-              label: label
-            }));
+            id: index,
+            value: values[index],
+            label: label,
+          }));
           var barChart = (
-                 <PieChart
-            series={[{ data: seriesData,   
-         
-            }, ]}
-            height={350}
-            slotProps={{
-              legend: {
-                hidden: true
-              }
-            }}
-          
-          />
+            <PieChart
+              series={[{ data: seriesData }]}
+              height={350}
+              slotProps={{
+                legend: {
+                  hidden: true,
+                },
+              }}
+            />
           );
         } else {
           var barChart = (
-            <BarChart
-              series={[
-                { data: responseData["content"]["data"][0] },
-                { data: responseData["content"]["data"][1] },
-                { data: responseData["content"]["data"][2] },
-                { data: responseData["content"]["data"][3] },
-              ]}
-              height={290}
-              xAxis={[
-                { data: responseData["content"]["xAxis"], scaleType: "band" },
-              ]}
-              margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
-            />
+            <div>
+              <BarChart
+                series={[
+                  { data: responseData["content"]["data"][0] },
+                  { data: responseData["content"]["data"][1] },
+                  { data: responseData["content"]["data"][2] },
+                  { data: responseData["content"]["data"][3] },
+                ]}
+                height={290}
+                xAxis={[
+                  { data: responseData["content"]["xAxis"], scaleType: "band" },
+                ]}
+                margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
+              />
+              <p>idk what to say</p>
+            </div>
           );
         }
         console.log();
