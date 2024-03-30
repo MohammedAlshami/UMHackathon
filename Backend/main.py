@@ -430,42 +430,42 @@ def gpt_response(conversation_history, role, message, prompt="return as a json o
  
     graph_type = gpt_graph(message)
 
-    if graph_type.get("is_graph_required", None):
-        data = [
-            [35, 44, 24, 34],
-            [51, 6, 49, 30],
-             [15, 25, 30, 50],
-              [129, 50, 15, 25
-              ]]
-        xAxisData= ['Q1', 'Q2', 'Q3', 'Q4']
-        output = {}
-        graph_type = gpt_graph(message)["graph_type"]
-        if graph_type.lower() == "line":
-            column_name = " DEPOSIT AMT "  # Specify the column name for deposit amounts
-            json_file = r"C:\Users\USER\Downloads\Dataset.json"  # Replace "data.json" with your JSON file path
-            # Get x and y values from JSON data
-            x_values, y_values = get_data_from_json(column_name, json_file)
-            print(x_values)
-
-            return {"content": "None",  "graph" : [], "data": data, "xAxis": xAxisData, "scaleType": "band", "graph_type":graph_type , "X":x_values , "Y": y_values}
-        elif graph_type == "pie":
-            x_values, y_values = generate_pie('CATEGORY', r"C:\Users\USER\Downloads\Dataset.json", start_date=None, end_date=None)
-            return {"content": "None",  "graph" : [], "data": data, "xAxis": xAxisData, "scaleType": "band", "graph_type":graph_type , "X":x_values , "Y": y_values}
-
-        else:
-            return {"content": "None",  "graph" : [], "data": data, "xAxis": xAxisData, "scaleType": "band", "graph_type": graph_type}
-
-        return output
+    isHistory = gpt_requires_dataset(message)
+    
+    if isHistory.get("requires_dataset", None):
+        print(f"""\n\n\n\n\n {isHistory.get("requires_dataset", None)} \n\n\n""")
+        response = generate_message(f"based on file file-RmSde8yAJ8WDcuSLQtRHZFDL and keep your answer to one sentence long {message}")
+            
     else:
-        isHistory = gpt_requires_dataset(message)
-        print(f"\n\n\n what does it {isHistory}\n\n\n", )
-        
-        # if json.loads(response).get("requires_dataset", None):
-        #     response = generate_message(f"based on file file-RmSde8yAJ8WDcuSLQtRHZFDL {message}")
-        if isHistory.get("requires_dataset", None):
-            response = generate_message(f"based on file file-RmSde8yAJ8WDcuSLQtRHZFDL {message}")
+        if graph_type.get("is_graph_required", None):
+            data = [
+                [35, 44, 24, 34],
+                [51, 6, 49, 30],
+                [15, 25, 30, 50],
+                [129, 50, 15, 25
+                ]]
+            xAxisData= ['Q1', 'Q2', 'Q3', 'Q4']
+            output = {}
+            graph_type = gpt_graph(message)["graph_type"]
+            if graph_type.lower() == "line":
+                column_name = " DEPOSIT AMT "  # Specify the column name for deposit amounts
+                json_file = r"C:\Users\USER\Downloads\Dataset.json"  # Replace "data.json" with your JSON file path
+                # Get x and y values from JSON data
+                x_values, y_values = get_data_from_json(column_name, json_file)
+                print(x_values)
+
+                return {"content": "None",  "graph" : [], "data": data, "xAxis": xAxisData, "scaleType": "band", "graph_type":graph_type , "X":x_values , "Y": y_values}
+            elif graph_type == "pie":
+                x_values, y_values = generate_pie('CATEGORY', r"C:\Users\USER\Downloads\Dataset.json", start_date=None, end_date=None)
+                return {"content": "None",  "graph" : [], "data": data, "xAxis": xAxisData, "scaleType": "band", "graph_type":graph_type , "X":x_values , "Y": y_values}
+
+            else:
+                return {"content": "None",  "graph" : [], "data": data, "xAxis": xAxisData, "scaleType": "band", "graph_type": graph_type}
+
+            return output
         else:
             response = json.loads(response).get("content", None)
+
             
     return response
 
