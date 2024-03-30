@@ -7,7 +7,7 @@ export default function LineGraph() {
     xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
     series={[
       {
-        data: [2, 5.5, 2, 8.5, 1.5, 5],
+        data: [20, 800, 200, 500, 2, 150],
       },
     ]}
     height={300}
