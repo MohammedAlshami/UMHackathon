@@ -60,6 +60,7 @@ const useClientLogic = () => {
         method: "POST",
         headers: headers,
         body: formData,
+        language: "Arabic"
       }
     );
 
