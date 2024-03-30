@@ -405,10 +405,12 @@ def gpt_graph_options(message):
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You're a graph options assistant. You assist in  in giving graph options"},
-            {"role": "user", "content": f"""Based on the following prompt, figure out what kind of graphs is the user looking for and return a list of the possible graphs  in json response as flag graph_types
-Profit Margin Analysis: This graph compares the revenue generated to the expenses incurred, depicting the profit margins and identifying periods of profitability.
-Return on Investment (ROI): This graph evaluates the return on investment for different assets or projects, aiding in decision-making for future investments.
-Risk vs. Return: A graph illustrating the relationship between risk and potential return for different investment options, aiding investors in making informed decisions based on their risk tolerance.
+            {"role": "user", "content": f""" response in json response as flag graph_types
+             
+             Based on the following prompt, figure out what kind of graphs is the user looking for and return a list of the possible graphs which can only be from the below options
+"Spending Habits": This graph compares the revenue generated to the expenses incurred, depicting the profit margins and identifying periods of profitability.
+"Return on Investment (ROI)": This graph evaluates the return on investment for different assets or projects, aiding in decision-making for future investments.
+"Risk vs. Return": A graph illustrating the relationship between risk and potential return for different investment options, aiding investors in making informed decisions based on their risk tolerance.
                 
                 below is the user prompt: 
                 {message}
@@ -471,7 +473,7 @@ def gpt_response(conversation_history, role, message, prompt="return as a json o
     # isHistory["requires_dataset"] = False
     if isHistory.get("requires_dataset", None):
         print(f"""\n\n\n\n\n {isHistory.get("requires_dataset", None)} \n\n\n""")
-        response = generate_message(f"based on file file-RmSde8yAJ8WDcuSLQtRHZFDL and keep your answer to one sentence long {message}")
+        response = generate_message(f"based on file file-RmSde8yAJ8WDcuSLQtRHZFDL and keep your answer to one sentence long (don't provide resources in the response). here is the user prompt: {message}")
     else:
         if graph_type.get("is_graph_required", None):
             graphs_types = gpt_graph_options(message)
@@ -517,13 +519,13 @@ def ask():
     try:
         if request.method == 'POST':
             message = request.args.get('message')
-            prompt = "check if the request needs access to database or knowledge base. return output as json in this format {content: content, requires_kb: true/false}"
+            prompt = "respond to user and return output as json in this format {content: content}"
             response = gpt_response(conversation_history, role="You are a helpful assistant. return output in json", message=message, prompt=prompt)
+            print(response)
             conversation_history.append({"role": "assistant", "content": response}) 
         elif request.method == 'GET':
             message = request.args.get('message')
             prompt = """
-
 
 If the user requests to generate a graph, add two flags:
 The first flag, "isgraph," can be either true or false.
@@ -536,6 +538,7 @@ Pie: for a pie graph
 Returning Essential Flags:
 
 Always include the flags  "content," "isgraph," and "chart_type" in your response.
+
             """
             response = gpt_response(conversation_history, role="You are a helpful assistant. return output in json", message=message, prompt=prompt)
             conversation_history.append({"role": "assistant", "content": response})  

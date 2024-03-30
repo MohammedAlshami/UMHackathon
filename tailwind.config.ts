@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import daisyui from 'daisyui'
 
 const config: Config = {
   content: [
@@ -9,6 +10,8 @@ const config: Config = {
   ],
   plugins: [
     require('preline/plugin'),
+    daisyui
+    
   ],
 };
 export default config;

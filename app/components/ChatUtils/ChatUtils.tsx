@@ -1,5 +1,6 @@
 import { BarChart, LineChart, PieChart } from "@mui/x-charts";
 import ReactDOMServer from "react-dom/server";
+import OptionsContainer from "../ChatComponents/OptionsContainer";
 
 export const fetchOpenAIResponse = async (message: string): Promise<any> => {
   try {
@@ -13,13 +14,20 @@ export const fetchOpenAIResponse = async (message: string): Promise<any> => {
     const responseData = await response.json();
 
     try {
-      if (responseData["content"]["Options"] === "None") {
+      if (responseData["content"]["options"] === "True") {
+        const values = responseData["content"]["graphs"];
+
         var barChart = (
-          <div></div>
+          <div>
+            <div className="w-full">
+              <h1 className="text-center pb-8 font-bold text-lg">Choose a Chart Type</h1>
+            </div>
+            <OptionsContainer values={values} />
+          </div>
         );
         return { content: barChart, isGraph: true };
-
       }
+
       if (responseData["content"]["content"] === "None") {
         if (responseData["content"]["graph_type"] === "line") {
           var barChart = (
@@ -36,7 +44,10 @@ export const fetchOpenAIResponse = async (message: string): Promise<any> => {
                 grid={{ vertical: true, horizontal: true }}
               />
 
-              <p>Observing the graph we can see that you spend your money mostly in 3 months</p>
+              <p>
+                Observing the graph we can see that you spend your money mostly
+                in 3 months
+              </p>
             </div>
           );
         } else if (responseData["content"]["graph_type"] === "pie") {
