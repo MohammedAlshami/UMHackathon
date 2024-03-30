@@ -8,8 +8,7 @@ import AppLayout from "./components/AppLayout";
 import AnalysisComponent from "./components/Graphs/AnalysisComponent";
 import { renderMarkdown } from "./components/ChatUtils/MarkdownRender";
 import useClientLogic from "./test/useClientLogic";
-import { BarChart } from "@mui/x-charts";
-
+import { BarChart, LineChart, PieChart } from "@mui/x-charts";
 
 interface Message {
   content: string;
@@ -52,7 +51,6 @@ const IndexPage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-
     setLoading(true);
     setUserContent("");
     const newUserMessage: Message = {
@@ -123,6 +121,13 @@ const IndexPage: React.FC = () => {
       setUserContent((prevUserContent) => prevUserContent + transcribedText);
     }
   }, [transcribedText]);
+  useEffect(() => {
+    if (transcribedText) {
+      if (userContent) {
+        handleSubmit(); // Call handleSubmit when userContent is updated
+      }
+    }
+  }, [userContent]);
   return (
     <AppLayout>
       <ChatContainer>
@@ -137,11 +142,12 @@ const IndexPage: React.FC = () => {
               <ChatBubble user={message.role} headline="">
                 {/* Render the markdown content */}
                 {/* {loading && message.role === "bot" && <p>Loading...</p>} */}
-               
-                {isChart ? ( <div className="w-96">
-                {message.content}
-                </div>) : <div dangerouslySetInnerHTML={{ __html: message.content }} />}
-                
+
+                {isChart ? (
+                  <div className="w-96">{message.content}</div>
+                ) : (
+                  <div dangerouslySetInnerHTML={{ __html: message.content }} />
+                )}
               </ChatBubble>
             </div>
           ))}
@@ -150,42 +156,40 @@ const IndexPage: React.FC = () => {
         </div>
       </ChatContainer>
 
-      
       <InputBar
         onClickHandler={handleSubmit}
         OnChangeHandler={(e) => setUserContent(e.target.value)}
         userContent={userContent}
         onKeyDownHandler={handleKeyDown}
       >
-<>
-        {error && <div>{error}</div>}
-        <button
-          type="button"
-          className="inline-flex flex-shrink-0 justify-center items-center size-8 rounded-lg text-gray-500 hover:text-blue-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-blue-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-          onClick={toggleRecording}
-        >
-          <svg
-            className={`flex-shrink-0 size-4 ${
-              isSvgRed ? "text-red-500" : "text-blue-500"
-            }`} // Toggle SVG color based on state
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        <>
+          {error && <div>{error}</div>}
+          <button
+            type="button"
+            className="inline-flex flex-shrink-0 justify-center items-center size-8 rounded-lg text-gray-500 hover:text-blue-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-blue-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+            onClick={toggleRecording}
           >
-            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-            <line x1="12" x2="12" y1="19" y2="22"></line>
-          </svg>
-        </button>
-      </>
+            <svg
+              className={`flex-shrink-0 size-4 ${
+                isSvgRed ? "text-red-500" : "text-blue-500"
+              }`} // Toggle SVG color based on state
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" x2="12" y1="19" y2="22"></line>
+            </svg>
+          </button>
+        </>
       </InputBar>
-
     </AppLayout>
   );
 };
