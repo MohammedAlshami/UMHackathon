@@ -7,16 +7,14 @@ export default function PieGraph() {
     series={[
       {
         data: [
-          { id: 0, value: 10, label: 'Medical' },
-          { id: 1, value: 20, label: 'Trasnportation' },
-          { id: 2, value: 35, label: 'Food & Beverages' },
-          { id: 3, value: 5, label: 'Entertainment' },
-          { id: 4, value: 20, label: 'Education' },
-          { id: 5, value: 10, label: 'Services' },
+          { id: 0, value: 125, label: 'Necessities' },
+          { id: 1, value: 50, label: 'Desires' },
+          { id: 2, value: 100, label: 'Savings' },
+          { id: 3, value: 25, label: 'Remaining' },
         ],
       },
     ]}
-    width={500}
+    width={600}
     height={200}
   />
   );

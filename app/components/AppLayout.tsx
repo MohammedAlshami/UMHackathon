@@ -313,10 +313,10 @@ const AppLayout = ({ children }: LayoutProps) => {
           <div className="px-6">
             <a
               className="flex-none text-xl font-semibold dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-              href="#"
+              href="/account"
               aria-label="Brand"
             >
-              SlideMap
+              Finn
             </a>
           </div>
 
@@ -330,7 +330,7 @@ const AppLayout = ({ children }: LayoutProps) => {
                   className={`flex items-center gap-x-3.5 py-2 px-2.5 ${
                     pathname === "/profile" ? "bg-gray-100" : ""
                   } text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:bg-gray-900 dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600`}
-                  href="/profile"
+                  href="/account"
                 >
                   <svg
                     className="flex-shrink-0 size-4"
@@ -347,68 +347,11 @@ const AppLayout = ({ children }: LayoutProps) => {
                     <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                     <polyline points="9 22 9 12 15 12 15 22" />
                   </svg>
-                  Profile
+                  Home
                 </a>
               </li>
 
-              <li>
-                <a
-                  className={`${
-                    pathname === "/profile/reports" ? "bg-gray-100" : ""
-                  } w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600`}
-                  href="/profile/reports"
-                >
-                  <svg
-                    className="flex-shrink-0 size-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    stroke-linecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
-                    <line x1="16" x2="16" y1="2" y2="6" />
-                    <line x1="8" x2="8" y1="2" y2="6" />
-                    <line x1="3" x2="21" y1="10" y2="10" />
-                    <path d="M8 14h.01" />
-                    <path d="M12 14h.01" />
-                    <path d="M16 14h.01" />
-                    <path d="M8 18h.01" />
-                    <path d="M12 18h.01" />
-                    <path d="M16 18h.01" />
-                  </svg>
-                  Reports
-                </a>
-              </li>
-              <li>
-                <a
-                  className={`w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 ${
-                    pathname === "/profile/datasets" ? "bg-gray-100" : ""
-                  } dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600`}
-                  href="/profile/datasets"
-                >
-                  <svg
-                    className="flex-shrink-0 size-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    stroke-linecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                  </svg>
-                  Datasets
-                </a>
-              </li>
+              
             </ul>
           </nav>
         </div>

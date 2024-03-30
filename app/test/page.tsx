@@ -4,6 +4,8 @@ import React from "react";
 import BarGraph from "../components/Charts/BarGraph";
 import PieGraph from "../components/Charts/PieGraph";
 import LineGraph from "../components/Charts/LineGraph";
+import BudgetForm from "../components/Form/BudgetForm";
+
 const Page = () => {
 
   return(
@@ -11,6 +13,7 @@ const Page = () => {
         <BarGraph></BarGraph>
         <PieGraph></PieGraph>
         <LineGraph></LineGraph>
+        <BudgetForm></BudgetForm>
     </div>
   );
 };

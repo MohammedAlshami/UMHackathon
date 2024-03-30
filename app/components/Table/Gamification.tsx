@@ -15,8 +15,8 @@ export const Gamification = () => {
                                     <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
                                         Leadership Board
                                     </h2>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                                        Save more, move points won!
+                                    <p className="text-sm text-blue-600 dark:text-blue-600">
+                                        Save more, win more points!
                                     </p>
                                 </div>
 

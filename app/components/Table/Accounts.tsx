@@ -5,8 +5,8 @@ const Accounts = () => {
         <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
             {/* <!-- Title --> */}
             <div className="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
-                <h2 className="text-2xl font-bold md:text-4xl md:leading-tight dark:text-white">Welcome to Demiurges</h2>
-                <p className="mt-1 text-gray-600 dark:text-gray-400">What will you like to start with to manage your money today?</p>
+                <h2 className="text-2xl font-bold md:text-4xl md:leading-tight dark:text-white">Welcome to Finn</h2>
+                <p className="mt-1 text-blue-600 dark:text-blue-600">What will you like to start with to manage your money today?</p>
             </div>
             {/* <!-- End Title --> */}
             {/* <!-- Icon Blocks --> */}
@@ -25,14 +25,14 @@ const Accounts = () => {
                                 <h3 className="block text-lg font-semibold text-gray-800 dark:text-white">Chat with Our Bot</h3>
                             </div>
                         </div>
-                        <p className="text-gray-600 dark:text-gray-400">The simplest way to keep your portfolio always up-to-date.</p>
+                        <p className="text-gray-600 dark:text-gray-400">Ask and get answers from our chatbot advisor, Finn!</p>
                         </a>
                     </div>
                     {/* <!-- End Card --> */}
 
                     {/* <!-- Card --> */}
                     <div className="size-full bg-white shadow-lg rounded-lg p-5 dark:bg-slate-900 hover:bg-blue-200">
-                        <a href="account/details">
+                        <a href="account/dashboard">
                             <div className="flex items-center gap-x-4 mb-3">
                             <div className="inline-flex justify-center items-center size-[62px] rounded-full border-4 border-blue-50 bg-blue-100 dark:border-blue-900 dark:bg-blue-800">
                                 <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -43,7 +43,7 @@ const Accounts = () => {
                                 <h3 className="block text-lg font-semibold text-gray-800 dark:text-white">Personal i-Savings</h3>
                             </div>
                         </div>
-                        <p className="text-gray-600 dark:text-gray-400">New design projects delivered to your inbox each morning.</p>
+                        <p className="text-gray-600 dark:text-gray-400">Set your budget and keep track with our dashboard.</p>
                         </a>
                         
                     </div>
@@ -52,7 +52,7 @@ const Accounts = () => {
                     {/* <!-- Card --> */}
                     
                         <div className="size-full bg-white shadow-lg rounded-lg p-5 dark:bg-slate-900 hover:bg-blue-200">
-                            <a href="#">
+                            <a href="account/createForm">
                             <div className="flex items-center gap-x-4 mb-3">
                                 <div className="inline-flex justify-center items-center size-[62px] rounded-full border-4 border-blue-50 bg-blue-100 dark:border-blue-900 dark:bg-blue-800">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -63,7 +63,7 @@ const Accounts = () => {
                                     <h3 className="block text-lg font-semibold text-gray-800 dark:text-white">Create A New Account</h3>
                                 </div>
                             </div>
-                            <p className="text-gray-600 dark:text-gray-400">Get your goods in front of millions of potential customers with ease.</p>
+                            <p className="text-gray-600 dark:text-gray-400">Add another whether it be personal or a joint account.</p>
                         </a>
                         </div>
                     
