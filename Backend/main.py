@@ -399,6 +399,25 @@ def gpt_graph(message):
         
     return json.loads(response)
 
+# def gpt_graph_options(message):
+        
+   
+#     completion = client.chat.completions.create(
+#         model="gpt-3.5-turbo",
+#         messages=[
+#             {"role": "system", "content": "You're a graph options assistant. You assist in  in giving graph options"},
+#             {"role": "user", "content": f"""Based on the following prompt, figure out what kind of graphs is the user looking for and return the graph type in response as flag graph_type
+#                 Here is a list the graphs and their description
+#                 "Expenditure Analysis", 
+#                  "Expenditure Analysis"
+                
+#              """}
+#         ],
+#         response_format={"type": "json_object"}
+#     )
+#     response = completion.choices[0].message.content
+        
+#     return json.loads(response)
 def gpt_requires_dataset(message):
         
     completion = client.chat.completions.create(
