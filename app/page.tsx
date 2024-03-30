@@ -182,9 +182,6 @@ const IndexPage: React.FC = () => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     console.log("hello world!");
-    // if (e.key === "Enter") {
-    //   handleSubmit();
-    // }
   };
 
   useEffect(() => {
@@ -205,7 +202,10 @@ const IndexPage: React.FC = () => {
   }, [isaccessible, audio]);
 
   const handleToggleChange = () => {
+    setAudio(null);
+
     setAccessible(true);
+    setAudio(null);
   };
 
   return (
