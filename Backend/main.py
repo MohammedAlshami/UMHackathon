@@ -470,12 +470,12 @@ def gpt_response(conversation_history, role, message, prompt="return as a json o
     isHistory = gpt_requires_dataset(message)
     # isHistory["requires_dataset"] = False
     if isHistory.get("requires_dataset", None):
-        print(f"""\n\n\n\n\n {isHistory.get("requires_dataset", None)} \n\n\n""")
-        response = generate_message(f"based on file file-RmSde8yAJ8WDcuSLQtRHZFDL and keep your answer to one sentence long (don't provide resources in the response). here is the user prompt: {message}")
+        print(f"""{isHistory.get("requires_dataset", None)}""")
+        response = generate_message(f"based on file file-RmSde8yAJ8WDcuSLQtRHZFDL and keep your answer to one sentence long (don't provide resources in the response). use myr for currency here is the user prompt: {message}")
     else:
         if graph_type.get("is_graph_required", None):
             graphs_types = gpt_graph_options(message)
-            print(f"""\n\n\n\n {type(graphs_types.get("graph_types", None))} \n\n\n\n""")
+            print(f"""{type(graphs_types.get("graph_types", None))}""")
             response = {"options": "True", "graphs": graphs_types.get("graph_types", None)}
             print(response)
             return response
