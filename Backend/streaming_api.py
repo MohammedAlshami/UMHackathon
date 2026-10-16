@@ -6,7 +6,7 @@ from openai import AssistantEventHandler
 from flask import Flask, request, jsonify, Response
 
 
-api_key = "os.environ.get("OPENAI_API_KEY", "")"
+api_key = os.environ.get("OPENAI_API_KEY", "")
 client = OpenAI(api_key=api_key)
 app = Flask(__name__)
 thread = client.beta.threads.create()

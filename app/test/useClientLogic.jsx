@@ -42,7 +42,7 @@ const useClientLogic = () => {
   };
 
   const textToAudio = async (audioUrl) => {
-    const apiKey = "os.environ.get("OPENAI_API_KEY", "")";
+    const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY || "";
     const history = [];
 
     const audioBlob = await fetch(audioUrl).then((response) => response.blob());

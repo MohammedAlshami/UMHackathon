@@ -58,7 +58,7 @@ const IndexPage: React.FC = () => {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer os.environ.get("OPENAI_API_KEY", "")`,
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY || ""}`, 
             "Content-Type": "application/json",
           },
           body: JSON.stringify({

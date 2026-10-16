@@ -11,7 +11,7 @@ import time
 from openai import OpenAI, AssistantEventHandler
 from typing_extensions import override
 
-api_key = "os.environ.get("OPENAI_API_KEY", "")"
+api_key = os.environ.get("OPENAI_API_KEY", "")
 client = OpenAI(api_key=api_key)
 
 # Initialize Flask app
@@ -139,13 +139,13 @@ def get_data_from_json(column_name, json_file, start_date=None, end_date=None):
 
 # Firebase configuration
 firebaseConfig = {
-    "apiKey": "os.environ.get("FIREBASE_API_KEY", "")",
-    "authDomain": "realtimedatabasetest-f226a.firebaseapp.com",
-    "databaseURL": "https://realtimedatabasetest-f226a-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "projectId": "realtimedatabasetest-f226a",
-    "storageBucket": "realtimedatabasetest-f226a.appspot.com",
-    "messagingSenderId": "348704796176",
-    "appId": "1:348704796176:web:38994c5ab4d54b752ce495"
+    "apiKey": os.environ.get("FIREBASE_API_KEY", ""),
+    "authDomain": os.environ.get("FIREBASE_AUTH_DOMAIN", ""),
+    "databaseURL": os.environ.get("FIREBASE_DB_URL", ""),
+    "projectId": os.environ.get("FIREBASE_PROJECT_ID", ""),
+    "storageBucket": os.environ.get("FIREBASE_STORAGE_BUCKET", ""),
+    "messagingSenderId": os.environ.get("FIREBASE_MESSAGING_SENDER_ID", ""),
+    "appId": os.environ.get("FIREBASE_APP_ID", "")
 }
 
 # Initialize Pyrebase
@@ -266,13 +266,13 @@ CORS(app)
 
 # Firebase configuration
 firebaseConfig = {
-    "apiKey": "os.environ.get("FIREBASE_API_KEY", "")",
-    "authDomain": "realtimedatabasetest-f226a.firebaseapp.com",
-    "databaseURL": "https://realtimedatabasetest-f226a-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "projectId": "realtimedatabasetest-f226a",
-    "storageBucket": "realtimedatabasetest-f226a.appspot.com",
-    "messagingSenderId": "348704796176",
-    "appId": "1:348704796176:web:38994c5ab4d54b752ce495"
+    "apiKey": os.environ.get("FIREBASE_API_KEY", ""),
+    "authDomain": os.environ.get("FIREBASE_AUTH_DOMAIN", ""),
+    "databaseURL": os.environ.get("FIREBASE_DB_URL", ""),
+    "projectId": os.environ.get("FIREBASE_PROJECT_ID", ""),
+    "storageBucket": os.environ.get("FIREBASE_STORAGE_BUCKET", ""),
+    "messagingSenderId": os.environ.get("FIREBASE_MESSAGING_SENDER_ID", ""),
+    "appId": os.environ.get("FIREBASE_APP_ID", "")
 }
 
 # Initialize Pyrebase

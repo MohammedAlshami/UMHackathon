@@ -4,7 +4,7 @@ from openai import OpenAI
 from typing_extensions import override
 from openai import AssistantEventHandler
 
-api_key = "os.environ.get("OPENAI_API_KEY", "")"
+api_key = os.environ.get("OPENAI_API_KEY", "")
 client = OpenAI(api_key=api_key)
 
 class EventHandler(AssistantEventHandler):    
